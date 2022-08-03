@@ -1,0 +1,30 @@
+@import "variables";
+
+.table-custom{
+  width: $tableCustomWidth;
+  border-collapse: $tableCustomCollapse;
+  border-spacing: $tableCustomSpacing;
+  thead{
+    background-color: $tableCustomTheadBg;
+    color: $tableCustomTheadColor;
+    tr{
+      letter-spacing: $tableCustomTheadTrSpacing;
+    }
+  }
+  tbody{
+    tr{
+      color: $tableCustomTbodyColor;
+      background-color: $tableCustomTbodyBg;
+    }
+  }
+  &.alternative-row{
+    tbody{
+      tr{
+        &:nth-child(odd){
+          color: $tableCustomTbodyColorAlternative;
+          background-color: $tableCustomTbodyBgAlternative;
+        }
+      }
+    }
+  }
+}
