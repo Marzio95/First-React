@@ -1,58 +1,59 @@
 // IMPORT
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 // import logo from './logo.svg';
 // import { Counter } from './features/counter/Counter';
-import './App.css';
+import './App.scss';
+import Users from './features/users/Users';
+import CardCustom from './shared/bootstrap/card-custom/CardCustom';
 import Button from './shared/design/button/Button';
 import {test as t} from './shared/design/button/Button';
 
-// VARIABILI che successivamente verranno passate allo state tipo vue
-const name: string | number = 'John Doe'; // string | number è un OR per i tipi di variabile
-let surname: any = 'Della Rocca'; // surname = 10; potrei cambiare il valore di surname in numero grazie al type any che non prevede un tipo preciso di dato
-// let display = false;
-
-// FUNZIONI che successivamente verranno passate nella class App tipo vue
-// const clickAction = () => {display = true; console.log('display: ' + display);}
-
-
 // FUNZIONE APP 
-class App extends Component {
+function App () {
 
-  state = {
-    display: false,
-    name: 'John Doe',
-    surname: 'Della Rocca', 
-    users: []
-  }
+  // HOOKS 
+  const [display, setDisplay] = useState(false); // display = false, cioè il valore iniziale dello state
+  const [name, setName] = useState('John Doe');
+  const [surname, setSurname] = useState('Della Rocca');
 
-  // CHIAMATA AD UN API CON UN METODO ASINCRONO (FETCH)
-  componentDidMount() {
-      fetch('https://jsonplaceholder.typicode.com/users')
-        .then(res => res.json())
-          .then(res => this.setState({users: res}))
-  }
+  useEffect ( () => {
+    console.log('dentro use effect');
+  }, [display]); // se aggiungo un array in questo modo ed inserisco una variabile, ogni volta che la variabile cambia il valore, la funzione viene eseguita
 
-  clickAction = () => {this.setState({display: !this.state.display}); console.log('display: ' + this.state.display)}
+  const clickAction = () => {setDisplay(!display)}
 
-  render() {
-    return (
-      <div className="App">
-          <h1>My name is: {this.state.name}</h1>
-          <h1>My surname is: {this.state.surname}</h1>
-          <h2>{t}</h2>
+  return (
+    <div className="App">
+        <h1>My name is: {name}</h1>
+        <h1>My surname is: {surname}</h1>
+        <h2>{t}</h2>
 
-          <Button text="save" classBt="btn-secondary" clickAction={() => console.log('clicked by you')}>
-              <span>Clicked by you</span>
-          </Button>
-          <Button text="Mostra o Nascondi" clickAction={this.clickAction}></Button>
-          <Button text="push"/>
+        <Button text="save" classBt="btn-secondary" clickAction={() => console.log('clicked by you')}>
+            <span>Clicked by you</span>
+        </Button>
+        <Button text={display ? 'Nascondi' : 'Mostra'} clickAction={clickAction}></Button>
+        <Button text="push"/>
 
-          <div>{this.state.display ? <div>{8 +8}</div> : 'non visualizzare numeri'}</div> {/* ternario dinamico in html */}
+        <div>{display ? <div>{8 +8}</div> : 'NON VISUALIZZARE NUMERI'}</div> {/* ternario dinamico in html */}
 
-          {this.state.users.map((user: any) => <div>{user.name}</div>)}
-      </div>
-    )
-  };
+        {display && <CardCustom title="test">
+
+            <h1>Card di esempio</h1>
+
+            <CardCustom title="test" classList={['bg-primary']} headerClass={['text-white']} bodyClass={['text-danger']}>
+                <h2>Sezione A</h2>
+            </CardCustom>
+
+            <CardCustom title="test">
+                <h2>Sezione B</h2>
+            </CardCustom>
+
+        </CardCustom>}
+
+        <Users></Users>
+
+    </div>
+  )
 }
 
 export default App;
