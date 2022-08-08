@@ -1,15 +1,24 @@
 // IMPORT
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 // import logo from './logo.svg';
 // import { Counter } from './features/counter/Counter';
 import './App.scss';
 import Users from './features/users/Users';
+import Login from './features/login/Login';
+import Header from '../src/core/Header';
 import CardCustom from './shared/bootstrap/card-custom/CardCustom';
 import Button from './shared/design/button/Button';
 import {test as t} from './shared/design/button/Button';
+import PublicRoute from './core/routes/PublicRoute';
+import AuthRoute from './core/routes/AuthRoute';
 
 // FUNZIONE APP 
 function App () {
+
+  useEffect( () => {
+    localStorage.getItem('token') && setAuth(true);
+  })
 
   // HOOKS 
   const [display, setDisplay] = useState(false); // display = false, cioè il valore iniziale dello state
@@ -22,8 +31,17 @@ function App () {
 
   const clickAction = () => {setDisplay(!display)}
 
+  const [auth, setAuth] = useState<boolean>(false);
+
+  const logoutHandler = () => {
+    setAuth(false);
+    localStorage.removeItem('token');
+  }
+
   return (
-    <div className="App">
+    <Router>
+      <div className="container">
+
         <h1>My name is: {name}</h1>
         <h1>My surname is: {surname}</h1>
         <h2>{t}</h2>
@@ -50,9 +68,16 @@ function App () {
 
         </CardCustom>}
 
-        <Users></Users>
+        
+        {
+          auth ?  <AuthRoute logout={ logoutHandler } /> : 
+                  <PublicRoute loginAction={ () => setAuth(true) } />
+        }
+       
 
-    </div>
+      </div>
+    </Router>
+
   )
 }
 
